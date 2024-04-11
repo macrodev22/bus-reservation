@@ -1,0 +1,59 @@
+*, *::after, *::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 1.8rem;
+}
+
+#app {
+  background: linear-gradient(150deg, #f6f6f1, #e6f7de);
+  height: 100vh;
+  padding: 2rem;
+}
+
+.w-50 {
+  width: 50%;
+}
+
+.input {
+  font-size: inherit;
+  padding: .5rem 1rem;
+  font-style: italic;
+}
+
+.t-right {
+  text-align: right;
+}
+
+.btn {
+  &, &:link, &:visited {
+      font-size: 2rem;
+      border-radius: 3rem;
+      padding: 1rem 3rem;
+      display: inline-block;
+      margin: 0.5rem 1rem;
+      text-decoration: none;
+      cursor: pointer;
+      color: #fe7575;
+      background-color: #fff;
+      border: none;
+      &.primary { 
+          background-color: #fe7575;
+          color: #fff;
+          &:hover {
+              background-color: #e15353;
+          }
+      }
+      &:hover {
+          background-color: #eee;
+      }
+  }
+}
