@@ -1,15 +1,20 @@
 <script setup>
 const props = defineProps({
     placeholder: String,
+    modelValue: String,
     type: {
         type:String,
         default:'text'
     }
 })
+
+const value = defineModel()
+const emit = defineEmits(['update:modelValue'])
+
 </script>
 <template>
 <div class="text-input">
-    <input :type="type" :placeholder="placeholder" />
+    <input :type="type" :placeholder="placeholder" v-model="value" @change="emit('update:modelValue', $event.target.value)" />
     <label>{{ placeholder }}</label>
 </div>
 </template>

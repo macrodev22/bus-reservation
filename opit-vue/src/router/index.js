@@ -4,6 +4,8 @@ import Signin from "../layout/Signin.vue";
 import Signup from "../layout/Signup.vue"
 import Contacts from "../layout/Contacts.vue";
 import Reservation from "../layout/Reservation.vue";
+import Fares from "../layout/Fares.vue";
+import ReservationsManager from '../layout/ReservationsManager.vue'
 
 
 const routes = [
@@ -31,6 +33,22 @@ const routes = [
         path: '/reserve',
         component: Reservation,
         name: 'reserve'
+    },
+    {
+        path: '/fares',
+        component: Fares,
+        name: 'fares',
+        meta: {
+            authRequired: true
+        }
+    },
+    {
+        path: '/reservations',
+        component: ReservationsManager,
+        name: 'manage_reservations',
+        meta: {
+            authRequired: true
+        }
     },
 ]
 

@@ -1,7 +1,9 @@
 <script setup>
 import Navigation from './layout/Navigation.vue';
 import { RouterView } from 'vue-router';
+import { useStore } from './store';
 
+const store = useStore()
 
 </script>
 
@@ -9,7 +11,11 @@ import { RouterView } from 'vue-router';
   <Navigation>
   </Navigation>
   <div>
-    <RouterView />
+    <RouterView v-slot="{ Component }">
+      <Transition mode="out-in" enter-active-class="animate__animated animate__bounceInRight" leave-active-class="animate__animated animate__bounceOutLeft">
+       <component :is="Component" />
+      </Transition>
+    </RouterView>
   </div>
   <div class="bus-bg"></div>
 </template>
@@ -26,5 +32,6 @@ import { RouterView } from 'vue-router';
   bottom: 0;
   right: 0;
 }
+
 
 </style>

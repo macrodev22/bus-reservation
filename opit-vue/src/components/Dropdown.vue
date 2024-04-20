@@ -1,7 +1,7 @@
 <template>
     <div class="input-drop">
         <label :for="name"> {{ capitalize(props.name) }}</label>
-        <select :name="name" :id="name" v-model="value" @change="emit('update:modelValue', value)">
+        <select :name="name" :id="name" v-model="value" @change="emit('update:modelValue', $event.target.value)">
             <option v-if="placeholder" selected disabled value="">{{ placeholder }}</option>
             <option v-for="(opt, index) of props.options" :key="index" :value="opt.value" :disabled="disable == opt.value ? true:false" >{{ opt.data }}</option>
         </select>

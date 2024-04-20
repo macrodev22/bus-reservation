@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineModel } from 'vue'
+import { defineModel } from 'vue'
 
 const props = defineProps({
     type:{
@@ -24,7 +24,7 @@ const value = defineModel()
 <template>
         <div class="input-text">
         <label :for="name"> {{ label }}</label>
-        <input :type="type" :name="name" :id="name" :value="value" class="input" v-model="value" @change="emit('update:modelValue', value)" :disabled="disabled" />
+        <input :type="type" :name="name" :id="name" class="input" v-model="value" @change="emit('update:modelValue', $event.target.value)" :disabled="disabled" />
     </div>
 </template>
 

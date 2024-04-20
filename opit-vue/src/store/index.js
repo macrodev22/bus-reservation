@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-export const useStore = defineStore('sotre', {
+export const useStore = defineStore('store', {
     state: () => ({
         cities: [
             { data: "Kampala", value: 'KLA' },
@@ -15,10 +15,23 @@ export const useStore = defineStore('sotre', {
             numberOfSeats: 1,
             origin: '',
             destination: ''
+          },
+          auth: {
+            user_id: null,
+            token: null
           }
     }),
-    getter: {
-
-    }
-
+    getters: {
+        isAuthenticated: (state) => {
+         return state.auth.token ? true : false 
+        }
+    },
+    actions: {
+      reserve(booking) {
+        this.reservation.numberOfSeats = booking.numberOfSeats
+        this.reservation.origin = booking.origin
+        this.reservation.destination = booking.destination
+      }
+    },
+    
 })
