@@ -50,7 +50,8 @@ class CityListResource(Resource):
 
         
 class ReservationListResource(Resource):
-    def get(self):
+    @token_required
+    def get(self, current_user):
         reservations = Reservation.query.all()
 
         results = []
@@ -58,11 +59,13 @@ class ReservationListResource(Resource):
         #Get Passengers
         for reservation in reservations:
             passenger_names = [ passenger.name for passenger in reservation.passengers ]
+            origin = City.query.filter_by(id=reservation.origin).first()
+            destination = City.query.filter_by(id=reservation.destination).first()
             results.append({
                 "reservation_id": reservation.id,
                 'number_of_passengers': reservation.number_of_passengers,
-                'origin': reservation.origin,
-                'destination': reservation.destination,
+                'origin': origin.name,
+                'destination': destination.name,
                 'passengers': passenger_names
             })
 
@@ -99,20 +102,50 @@ class ReservationListResource(Resource):
         }, 201
     
 class ReservationResource(Resource):
-     def get(self, reservation_id):
-        result = Reservation.query.filter_by(id = reservation_id).first()
+    def get(self, reservation_id):
+        result: Reservation = Reservation.query.filter_by(id = reservation_id).first()
 
         if(result):
+            origin : City = City.query.filter_by(id=result.origin).first()
+            destination : City = City.query.filter_by(id=result.destination).first()
+
             return {
                 "status" : "success",
                 "reservation_id" : result.id,
-                'number_of_passengers': result.number_of_passengers
+                'number_of_passengers': result.number_of_passengers,
+                'origin': origin.name,
+                'destination': destination.name
             }, 200
         else:
             return {
                 "status": "fail",
                 "message" : "No reservation found"
             }, 404
+    
+    @token_required
+    def delete(self, current_user, reservation_id):
+        result: Reservation = Reservation.query.filter_by(id=reservation_id).first()
+
+        if not result:
+            return {
+                'status': 'fail',
+                'message': 'record doen not exits'
+            }, 400
+
+        # Delete passengers associated to reservation
+        Passenger.query.filter_by(reservation_id=reservation_id).delete()
+
+        db.session.delete(result)
+
+        db.session.commit()
+
+        return {
+            'status': 'success',
+            'message': 'Test delete endpoint good',
+            'data': {
+                'id': reservation_id
+            }
+        }, 203
 
 class UserListResource(Resource):
     def get(self):

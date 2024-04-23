@@ -18,6 +18,10 @@ export const getReservations = () => {
     return apiClient.get('/reservations')
 }
 
+export const deleteReservation = (id) => {
+    return apiClient.delete(`/reservations/${id}`)
+}
+
 export const registerUser = (userDetails) => {
     return apiClient.post('/users', {
         type: 'registration',

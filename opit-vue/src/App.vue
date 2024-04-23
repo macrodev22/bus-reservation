@@ -1,9 +1,29 @@
 <script setup>
 import Navigation from './layout/Navigation.vue';
+import apiClient from './services/apiClient';
 import { RouterView } from 'vue-router';
+import { onMounted } from 'vue';
 import { useStore } from './store';
 
 const store = useStore()
+
+//Fetch Cities
+onMounted(() => {
+        apiClient.get('/cities')
+        .then(res => {
+          const dbCities = res.data
+
+          const cityData = dbCities.map(city => { return {data: city['name'] , value: city['city_id']} })
+
+          store.cities = cityData
+        })
+        .catch(err => {
+          console.log(`Error fetching cities `, err.message)
+
+        })
+        
+})
+
 
 </script>
 

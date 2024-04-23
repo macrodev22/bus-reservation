@@ -40,6 +40,9 @@ onMounted(() => {
 
 const bookPassengers = () => {
     // TODO Validated names
+    if(passengerNames.value.some(name => name == '')) {
+        return toast.warning(`All passenger names are required!`)
+    }
 
     makeReservation({
         passengers: passengerNames.value,

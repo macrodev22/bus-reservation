@@ -20,9 +20,20 @@ const router = useRouter()
 const store = useStore()
 
 const logUserIn = () => {
+    //Validate
+    if(!username.value || !password.value) {
+        toast.warning('Username and password are required!')
+        return
+    }
+
     login({ username: username.value, password: password.value })
     .then(user_data => {
         const token = user_data.data.token
+
+        if(!token) {
+            toast.warning('Invalid credentials!')
+            return
+        }
 
         store.auth.token = token
 

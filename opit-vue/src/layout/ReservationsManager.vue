@@ -1,11 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getReservations } from '../services/apiClient.js'
+import { getReservations, deleteReservation } from '../services/apiClient.js'
+import { useToast } from 'vue-toastification';
 import Card from '../components/Card.vue';
 import Title from '../components/Title.vue';
 import Button from '../components/Button.vue';
 
 const reservations = ref([])
+const toast = useToast()
 
 onMounted(() => {
     // Get reservations
@@ -13,8 +15,24 @@ onMounted(() => {
     .then(res => {
         reservations.value = res.data.results
     })
+    .catch(err => {
+        toast.error('Error getting reservations, Ensure you are logged in')
+    })
 
 })
+
+const removeReservationHandler = (id) => {
+    deleteReservation(id)
+    .then((res) => {
+        toast.success(`Reservation ${res.data.data.id || ''} deleted successfully!`)
+
+        getReservations()
+        .then(res => {
+        reservations.value = res.data.results
+        })
+
+    })
+}
 
 </script>
 <template>
@@ -25,6 +43,9 @@ onMounted(() => {
                 <div class="reservation">
                     <div class="pax">
                         {{ reservation.number_of_passengers }} Passengers
+                        <p class="origin-destination">
+                            {{ reservation.origin }} to {{ reservation.destination }}
+                        </p>
                     </div>
                     <div class="names">
                         <ul>
@@ -32,7 +53,7 @@ onMounted(() => {
                         </ul>
                     </div>
                     <div class="actions">
-                        <Button>🗑 Delete</Button>
+                        <Button :onclick="() => removeReservationHandler(reservation.reservation_id)">🗑 Delete</Button>
                     </div>
                 </div>
             </li>
@@ -56,6 +77,10 @@ onMounted(() => {
 
             &:hover {
                 background-color: #c7383878;
+            }
+            .origin-destination {
+                margin-top: 1rem;
+                color: #ac0000d0;
             }
             .names {
                 counter-reset: people;

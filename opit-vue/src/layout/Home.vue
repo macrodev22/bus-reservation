@@ -7,27 +7,11 @@ import Title from '../components/Title.vue';
 import Dropdown from '../components/Dropdown.vue';
 import Textfield from '../components/Textfield.vue';
 import { useStore } from '../store';
-import apiClient from '../services/apiClient';
+import { useToast } from 'vue-toastification';
 
 const store = useStore()
 const router = useRouter()
-
-//Fetch Cities
-;(() => {
-        apiClient.get('/cities')
-        .then(res => {
-          const dbCities = res.data
-
-          const cityData = dbCities.map(city => { return {data: city['name'] , value: city['city_id']} })
-
-          store.cities = cityData
-        })
-        .catch(err => {
-          console.log(`Error fetching cities `, err.message)
-
-        })
-        
-})()
+const toast = useToast()
 
 const selectedOrigin = ref('')
 const selectedDestination = ref('')
@@ -35,6 +19,17 @@ const numberOfSeats = ref('1')
 
 
 const sendBooking = (e) => {
+
+    // Validate
+    if(!selectedOrigin.value || !selectedDestination.value) {
+        toast.warning('The origin and destination are required!')
+        return
+    }
+
+    if(numberOfSeats.value <= 0 || numberOfSeats.value > 20) {
+        toast.warning('Invalid number of seats! \nSelect between 1 and 20 seats')
+        return
+    }
 
     e.preventDefault()
     const booking = { 
